@@ -226,8 +226,19 @@ const SlidesPart1 = (function(){
     const cv = container.querySelector('canvas');
     const ctx2 = cv.getContext('2d');
     const hudEl = container.querySelector('.ndvi-hud');
-    function resize(){cv.width=container.clientWidth*2;cv.height=container.clientHeight*2;cv.style.width=container.clientWidth+'px';cv.style.height=container.clientHeight+'px';}
-    resize();
+    function resize(){
+      const cssW = Math.max(320, Math.floor(container.clientWidth || 480));
+      const cssH = Math.max(220, Math.floor(container.clientHeight || 320));
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = Math.round(cssW * dpr);
+      cv.height = Math.round(cssH * dpr);
+      cv.style.width = cssW + 'px';
+      cv.style.height = cssH + 'px';
+      ctx2.setTransform(1, 0, 0, 1, 0, 0);
+      ctx2.imageSmoothingEnabled = false;
+      return {w: cv.width, h: cv.height};
+    }
+    let size = resize();
     // --- Value noise (Perlin-like) implementation ---
     // Grid of random gradients interpolated smoothly for organic terrain-like fields.
     const GRID = 64; // noise grid resolution
@@ -290,7 +301,8 @@ const SlidesPart1 = (function(){
       container._raf = requestAnimationFrame(draw);
       if(ts - lastRender < FRAME_INTERVAL) return;
       lastRender = ts;
-      const w=cv.width,h=cv.height;
+      size = resize();
+      const w=size.w,h=size.h;
       // Slowly evolve the noise field by regenerating gradient lattice every ~90 frames
       frameCount++;
       if(frameCount % 90 === 0){ gradOffset += 7; regenGrad(gradOffset); }
@@ -358,7 +370,7 @@ const SlidesPart1 = (function(){
       }
     }
     draw(0);
-    window.addEventListener('resize',resize);
+    window.addEventListener('resize', ()=> resize());
   }
 
   // ---------- 05. DISASTER ----------

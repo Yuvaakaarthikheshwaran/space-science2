@@ -60,8 +60,19 @@ const SlidesPart2 = (function(){
     const cv = container.querySelector('canvas');
     const ctx2 = cv.getContext('2d');
     const tagEl = container.querySelector('.wviz-tag');
-    function resize(){cv.width=container.clientWidth*2;cv.height=container.clientHeight*2;cv.style.width=container.clientWidth+'px';cv.style.height=container.clientHeight+'px';}
-    resize();
+    function resize(){
+      const cssW = Math.max(320, Math.floor(container.clientWidth || 480));
+      const cssH = Math.max(220, Math.floor(container.clientHeight || 320));
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = Math.round(cssW * dpr);
+      cv.height = Math.round(cssH * dpr);
+      cv.style.width = cssW + 'px';
+      cv.style.height = cssH + 'px';
+      ctx2.setTransform(1, 0, 0, 1, 0, 0);
+      ctx2.imageSmoothingEnabled = false;
+      return {w: cv.width, h: cv.height};
+    }
+    let size = resize();
     let t=0;
 
     // ===== Value noise for flow field (curl-noise-like) =====
@@ -128,7 +139,8 @@ const SlidesPart2 = (function(){
 
     let frameCount = 0;
     function draw(){
-      const w=cv.width,h=cv.height;
+      size = resize();
+      const w=size.w,h=size.h;
       // Fade trails (low alpha = long streamlines)
       ctx2.fillStyle='rgba(3,4,7,0.05)'; ctx2.fillRect(0,0,w,h);
       // Evolve noise field slowly
@@ -159,7 +171,7 @@ const SlidesPart2 = (function(){
       container._raf=requestAnimationFrame(draw);
     }
     draw();
-    window.addEventListener('resize',resize);
+    window.addEventListener('resize', ()=> resize());
   }
 
   // ---------- 08. TIME DILATION (MASTERPIECE) ----------

@@ -55,6 +55,12 @@
     return -1;
   }
 
+  function resolveTargetIndex(index, dir=1){
+    if(index<0 || index>=config.length) return -1;
+    if(!skipped.has(index)) return index;
+    return nextNonSkipped(index, dir);
+  }
+
   // ---- Build all slides (lazy: build on first visit) ----
   function buildSlide(i){
     if(slideEls[i]) return slideEls[i];
@@ -85,28 +91,29 @@
 
   // ---- Navigation ----
   function goTo(index, dir=1){
-    if(index<0||index>=config.length||index===current) return;
+    const targetIndex = resolveTargetIndex(index, dir);
+    if(targetIndex<0||targetIndex===current) return;
     const old = current>=0 ? slideEls[current] : null;
     const oldIndex = current;
-    current = index;
-    visited.add(index);
+    current = targetIndex;
+    visited.add(targetIndex);
 
-    const newSlide = buildSlide(index);
-    const cfg = config[index];
+    const newSlide = buildSlide(targetIndex);
+    const cfg = config[targetIndex];
 
     // update nav
     navList.querySelectorAll('.nav-link').forEach((n,i)=>{
-      n.classList.toggle('active', i===index);
+      n.classList.toggle('active', i===targetIndex);
       if(visited.has(i)) n.classList.add('visited');
     });
     // update minimap
     progressMap.querySelectorAll('.pm-node').forEach((n,i)=>{
-      n.classList.toggle('active', i===index);
+      n.classList.toggle('active', i===targetIndex);
       if(visited.has(i)) n.classList.add('visited');
     });
     // counter + progress
-    counter.textContent = String(index+1).padStart(2,'0')+' / '+String(config.length).padStart(2,'0');
-    progressFill.style.width = ((index)/(config.length-1))*100+'%';
+    counter.textContent = String(targetIndex+1).padStart(2,'0')+' / '+String(config.length).padStart(2,'0');
+    progressFill.style.width = ((targetIndex)/(config.length-1))*100+'%';
     // notes
     notesBody.textContent = cfg.notes;
     // script watermark
