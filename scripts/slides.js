@@ -228,7 +228,7 @@ const SlidesPart1 = (function(){
     const hudEl = container.querySelector('.ndvi-hud');
     function resize(){
       const cssW = Math.max(320, Math.floor(container.clientWidth || 480));
-      const cssH = Math.max(220, Math.floor(container.clientHeight || 320));
+      const cssH = Math.max(220, Math.min(500, Math.floor(container.clientHeight || 320)));
       const dpr = Math.min(2, window.devicePixelRatio || 1);
       cv.width = Math.round(cssW * dpr);
       cv.height = Math.round(cssH * dpr);
