@@ -87,8 +87,10 @@ const SlidesPart2 = (function(){
     function smoothstep(x){ return x*x*(3-2*x); }
     function noise(u,v){
       const x=u*NG, y=v*NG;
-      const x0=Math.floor(x), y0=Math.floor(y);
-      const x1=Math.min(x0+1,NG), y1=Math.min(y0+1,NG);
+      const x0=Math.max(0, Math.min(NG, Math.floor(x)));
+      const y0=Math.max(0, Math.min(NG, Math.floor(y)));
+      const x1=Math.max(0, Math.min(NG, x0+1));
+      const y1=Math.max(0, Math.min(NG, y0+1));
       const fx=smoothstep(x-x0), fy=smoothstep(y-y0);
       const a=ngrad[x0][y0], b=ngrad[x1][y0], c=ngrad[x0][y1], d=ngrad[x1][y1];
       return (a*(1-fx)+b*fx)*(1-fy)+(c*(1-fx)+d*fx)*fy;

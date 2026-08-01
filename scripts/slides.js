@@ -262,8 +262,10 @@ const SlidesPart1 = (function(){
     function valueNoise(u, v){
       // u,v in [0,1]
       const x = u*GRID, y = v*GRID;
-      const x0 = Math.floor(x), y0 = Math.floor(y);
-      const x1 = Math.min(x0+1,GRID), y1 = Math.min(y0+1,GRID);
+      const x0 = Math.max(0, Math.min(GRID, Math.floor(x)));
+      const y0 = Math.max(0, Math.min(GRID, Math.floor(y)));
+      const x1 = Math.max(0, Math.min(GRID, x0+1));
+      const y1 = Math.max(0, Math.min(GRID, y0+1));
       const fx = smoothstep(x - x0), fy = smoothstep(y - y0);
       const v00 = grad[x0][y0], v10 = grad[x1][y0], v01 = grad[x0][y1], v11 = grad[x1][y1];
       const top = v00*(1-fx) + v10*fx;
