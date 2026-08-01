@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORBITAL // Space Science Mission Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/slides.css">
+</head>
+<body>
+  <!-- WebGL Background Canvas -->
+  <canvas id="webgl-bg"></canvas>
+
+  <!-- Vignette + scanlines overlay -->
+  <div class="overlay-fx"></div>
+
+  <!-- Boot loader -->
+  <div id="boot-loader">
+    <div class="boot-ring"></div>
+    <div class="boot-text">INITIALIZING ORBITAL SYSTEMS</div>
+    <div class="boot-bar"><span></span></div>
+  </div>
+
+  <!-- Top HUD -->
+  <header id="top-hud">
+    <div class="hud-left">
+      <div class="hud-logo"><span class="logo-mark"></span> ORBITAL</div>
+      <div class="hud-mission">MISSION: EARTH-SHIELD // LEO-SYNC</div>
+    </div>
+    <div class="hud-center">
+      <div class="mission-timer" id="mission-timer">T+ 00:00:00</div>
+    </div>
+    <div class="hud-right">
+      <button class="hud-btn" id="audio-toggle" title="Audio"><i class="fa-solid fa-volume-xmark"></i></button>
+      <button class="hud-btn" id="autoplay-toggle" title="Autoplay"><i class="fa-solid fa-play"></i></button>
+      <button class="hud-btn" id="fullscreen-toggle" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+      <button class="hud-btn" id="laser-toggle" title="Laser Pointer"><i class="fa-solid fa-bullseye"></i></button>
+      <button class="hud-btn" id="notes-toggle" title="Presenter Notes"><i class="fa-solid fa-note-sticky"></i></button>
+      <button class="hud-btn" id="mission-ctrl-toggle" title="Mission Control (Reorder/Skip)"><i class="fa-solid fa-sliders"></i></button>
+      <button class="hud-btn" id="script-toggle" title="Toggle Script Watermark"><i class="fa-solid fa-closed-captioning"></i></button>
+    </div>
+  </header>
+
+  <!-- Side navigator -->
+  <aside id="sidebar">
+    <div class="sidebar-id">SECTION NAVIGATOR</div>
+    <nav id="nav-list"></nav>
+    <div class="sidebar-footer">
+      <div class="status-dot online"></div>
+      <span>SYSTEMS NOMINAL</span>
+    </div>
+  </aside>
+
+  <!-- Slide stage -->
+  <main id="stage">
+    <div id="slides-root"></div>
+  </main>
+
+  <!-- Progress map / minimap -->
+  <div id="progress-map"></div>
+
+  <!-- Bottom controls -->
+  <div id="bottom-controls">
+    <button class="ctrl-btn" id="prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="ctrl-progress">
+      <div class="ctrl-progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="ctrl-counter" id="slide-counter">01 / 13</div>
+    <button class="ctrl-btn" id="next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+
+  <!-- Presenter notes panel -->
+  <div id="notes-panel">
+    <div class="notes-header">PRESENTER NOTES <button id="notes-close"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="notes-body" id="notes-body"></div>
+  </div>
+
+  <!-- Laser pointer -->
+  <div id="laser-dot"></div>
+
+  <!-- Transition overlay -->
+  <div id="transition-overlay"></div>
+
+  <!-- Mission Control Panel (slide reorder / skip) -->
+  <div id="mission-ctrl-panel">
+    <div class="mc-header">
+      <span>MISSION CONTROL</span>
+      <button id="mc-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="mc-section">
+      <div class="mc-label">SLIDE ORDER // DRAG TO REORDER</div>
+      <div id="mc-reorder-list"></div>
+    </div>
+    <div class="mc-section">
+      <div class="mc-label">SKIP SLIDES</div>
+      <div id="mc-skip-list"></div>
+    </div>
+    <div class="mc-section">
+      <div class="mc-label">TRANSITION MODE</div>
+      <div id="mc-transition-modes">
+        <button class="mc-tmode active" data-mode="auto">AUTO</button>
+        <button class="mc-tmode" data-mode="hyperdrive">HYPERDRIVE</button>
+        <button class="mc-tmode" data-mode="hud-glitch">GLITCH</button>
+      </div>
+    </div>
+    <div class="mc-section">
+      <button class="mc-reset" id="mc-reset-order">RESET ORDER</button>
+    </div>
+  </div>
+
+  <!-- Script watermark -->
+  <div id="script-watermark"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="config/slides.config.js"></script>
+  <script src="scripts/webgl-background.js"></script>
+  <script src="scripts/audio-manager.js"></script>
+  <script src="scripts/transitions.js"></script>
+  <script src="scripts/slides.js"></script>
+  <script src="scripts/slides2.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
